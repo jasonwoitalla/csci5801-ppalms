@@ -20,6 +20,10 @@ public class Line {
         return isComment;
     }
 
+    public void setCommented(boolean isComment) {
+        this.isComment = isComment;
+    }
+
     public String getLineContent() {
         return content;
     }

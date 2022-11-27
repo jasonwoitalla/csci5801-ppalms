@@ -24,6 +24,8 @@ public class Instructor {
     }
 
     public void upload(String path) {
-        
+        System.out.println("Instructor is uploading a file located at: " + path);
+        File file = new File(path);
+        activeFile = file;
     }
 }
