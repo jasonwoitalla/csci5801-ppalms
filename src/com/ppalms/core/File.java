@@ -35,15 +35,45 @@ public class File {
         }
     }
 
-    public int createLineTuple() {
-        LineTuple tuple = new LineTuple();
-        tuples.add(tuple);
+    public int createLineTuple(int start, int end) {
+        if(start > end || end-start < 1) {
+            System.out.println("Invalid line range");
+            return -1;
+        }
 
+        for(int i = 0; i < tuples.size(); i++) {
+            if(tuples.get(i).isLineInside(start) || tuples.get(i).isLineInside(end)) {
+                System.out.println("Line range overlaps with existing tuple");
+                return -1;
+            }
+        }
+
+        LineTuple tuple = new LineTuple(start, end, tuples.size());
+
+        //Probably should change this to a hash map for efficiency but it doesn't matter right now.
+        for (int i = start; i <= end; i++) {
+            for (int j = 0; j < lines.size(); j++) {
+                if (lines.get(j).getLinePosition() == i) {
+                    tuple.addLine(lines.get(j));
+                    lines.remove(j);
+                    break;
+                }
+            }
+        }
+        
+        tuples.add(tuple);
         return tuples.size() - 1;
     }
 
     public void removeLineTuple(int index) {
-        tuples.remove(index);
+        for(int i = 0; i < tuples.size(); i++) {
+            if(tuples.get(i).getNumber() == index) {
+                System.out.println("Removing tuple: " + i);
+                lines.addAll(tuples.get(i).getRawLines());
+                tuples.remove(i);
+                return;
+            }
+        }
     }
 
     public LineTuple getLineTuple(int index) {
@@ -51,18 +81,37 @@ public class File {
     }
 
     public void toggleCommented(int linePosition) {
-        lines.get(linePosition - 1).setCommented(!lines.get(linePosition - 1).getIsComment());
+        for(int i = 0; i < lines.size(); i++) {
+            if(lines.get(i).getLinePosition() == linePosition) {
+                lines.get(i).setCommented(!lines.get(i).getIsComment());
+                return;
+            }
+        }
     }
 
     public ArrayList<Line> getLines() {
+        lines.sort((l1, l2) -> l1.getLinePosition() - l2.getLinePosition()); // maintain sorted order
+
         ArrayList<Line> output = new ArrayList<Line>();
+        ArrayList<LineTuple> myTuples = new ArrayList<LineTuple>(tuples);
         for(int i = 0; i < lines.size(); i++) {
-            for(int j = 0; j < tuples.size(); j++) {
-                if(tuples.get(j).toGroupedLine().getLinePosition() < lines.get(i).getLinePosition()) {
-                    output.add(tuples.get(j).toGroupedLine());
+            boolean tupleInserted = true;
+            while(tupleInserted) {
+                tupleInserted = false;
+                for(int j = 0; j < myTuples.size(); j++) {
+                    if(myTuples.get(j).toGroupedLine().getLinePosition() < lines.get(i).getLinePosition()) {
+                        output.add(myTuples.remove(j).toGroupedLine());
+                        tupleInserted = true;
+                        break;
+                    }
                 }
             }
             output.add(lines.get(i));
+        }
+
+        myTuples.sort((l1, l2) -> l1.toGroupedLine().getLinePosition() < l2.toGroupedLine().getLinePosition() ? -1 : 1);
+        for(int i = 0; i < myTuples.size(); i++) {
+            output.add(myTuples.get(i).toGroupedLine());
         }
 
         return output;
@@ -91,11 +140,13 @@ public class File {
             int position = myLines.get(i).getLinePosition();
             String lineNum = String.format("%03d", position);
             if(myLines.get(i).getIsComment())
-                output += ConsoleColors.GREEN;
+                output += ConsoleColors.GREEN + "# ";
+            if(myLines.get(i).getIsGrouped())
+                output += ConsoleColors.YELLOW + "| ";
 
             output += lineNum + "  " + myLines.get(i).getLineContent() + END_LINE;
 
-            if(myLines.get(i).getIsComment())
+            if(myLines.get(i).getIsComment() || myLines.get(i).getIsGrouped())
                 output += ConsoleColors.RESET;
         }
         return output;

@@ -5,6 +5,7 @@ public class Line {
     private int linePosition;
     private boolean isComment;
     private String content;
+    private boolean isGrouped;
 
     public Line(int linePosition, boolean isComment, String content) {
         this.linePosition = linePosition;
@@ -26,5 +27,13 @@ public class Line {
 
     public String getLineContent() {
         return content;
+    }
+
+    public void setGrouped(boolean isGrouped) {
+        this.isGrouped = isGrouped;
+    }
+
+    public boolean getIsGrouped() {
+        return isGrouped;
     }
 }

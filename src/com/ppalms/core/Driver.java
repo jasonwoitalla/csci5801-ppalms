@@ -19,8 +19,9 @@ public class Driver {
         printFile(instructor.getActiveFile());
         System.out.println("Enter a command with a line number(s) to annotate your file.");
         System.out.println("Comment: c <line number>");
-        System.out.println("Create tuple: t <line numbers>");
+        System.out.println("Create tuple: t <start line> <end line>");
         System.out.println("Remove tuple: r <tuple number>");
+        System.out.println("Generate questions: g (NOT IMPLEMENTED IN THIS VERSION)");
 
         int status = 0;
         while(status >= 0) {
@@ -37,17 +38,20 @@ public class Driver {
                     instructor.getActiveFile().toggleCommented(argsInt[0]);
                     break;
                 case 't':
-                    int tupleIndex = instructor.getActiveFile().createLineTuple();
-                    for(int i = 0; i < argsInt.length; i++) {
-                        int linePosition = argsInt[i] - 1;
-                        Line myLine = instructor.getActiveFile().getLines().get(linePosition);
-                        instructor.getActiveFile().getLineTuple(tupleIndex).addLine(myLine);
+                    int index = instructor.getActiveFile().createLineTuple(argsInt[0], argsInt[1]);
+                    if(index == -1) {
+                        System.out.println("Invalid grouping.");
                     }
                     break;
                 case 'r':
-                    instructor.getActiveFile().removeLineTuple(argsInt[0] - 1);
+                    instructor.getActiveFile().removeLineTuple(argsInt[0]);
                     break;
                 case 'q':
+                    status = -1;
+                    break;
+                case 'g':
+                    System.out.println("This feature is not implemented in this version.");
+                    System.out.println("When it is your annotations will be good enough for question generation.");
                     status = -1;
                     break;
                 default:
