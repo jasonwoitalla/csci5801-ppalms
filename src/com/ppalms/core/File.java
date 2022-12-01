@@ -133,6 +133,10 @@ public class File {
         return true;
     }
 
+    public ArrayList<LineTuple> getTuples(){
+        return this.tuples;
+    }
+
     public String toString() {
         String output = "";
         ArrayList<Line> myLines = getLines();
