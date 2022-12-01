@@ -2,6 +2,10 @@ package com.ppalms.core;
 
 import java.util.Scanner;
 
+/**
+ * The driver class. Read the readme documentation to learn more about the program.
+ * It will explain how to use this class. This class is not apart of the PPALMS api. 
+ */
 public class Driver {
     
     public static void main(String[] args) {
