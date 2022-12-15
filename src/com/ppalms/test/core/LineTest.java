@@ -40,6 +40,7 @@ public class LineTest {
         assertTrue("Line setGrouped works: ", test_line.getIsGrouped());
     }
 
+    @Test
     public void testGetIsGrouped() {
         Line test_line = new Line(2, true, "test, test");
         test_line.setGrouped(false);

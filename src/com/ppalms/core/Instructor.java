@@ -15,6 +15,13 @@ public class Instructor {
     private String role;
     private File activeFile;
 
+    public enum QuestionType {
+        DEFAULT,
+        MULTIPLE_CHOICE,
+        FILL_IN_BLANK
+    }
+    private QuestionType questionType;
+
     /**
      * This is the constructor for the instructor class. It takes in a name and a role and sets them
      * @param name The name of the instructor
@@ -23,6 +30,7 @@ public class Instructor {
     public Instructor(String name, String role) {
         this.name = name;
         this.role = role;
+        this.questionType = QuestionType.DEFAULT;
     }
 
     /**
@@ -47,6 +55,22 @@ public class Instructor {
      */
     public File getActiveFile() {
         return activeFile;
+    }
+
+    /**
+     * Get the question type that this instructor has set
+     * @return an integer representing the question type
+     */
+    public QuestionType getQuestionType() {
+        return questionType;
+    }
+
+    /**
+     * Sets the question type that instructor generates
+     * @param questionType
+     */
+    public void setQuestionType(QuestionType questionType) {
+        this.questionType = questionType;
     }
 
     /**
