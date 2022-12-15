@@ -45,6 +45,11 @@ public class Driver {
             System.out.print("Enter your command: ");
             String command = scan.nextLine();
             char action = command.charAt(0);
+            if(action == 'q') {
+                scan.close();
+                return;
+            }
+
             String[] cmdArgs = command.substring(2).split(" ");
             int[] argsInt = new int[cmdArgs.length];
             for(int i = 0; i < cmdArgs.length; i++) {
