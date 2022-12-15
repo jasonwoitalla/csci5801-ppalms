@@ -1,4 +1,4 @@
-# CSCI 5801 PPALMS
+# CSCI 5801 PPALMS Group 24
 This is group 24's implementation of Parson's Problem Appliance for Learning Management Systems (PPALMS).
 
 ## How to build
